@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <bean id="triangle" class="springdemo.Triangle">
+        <property name="type" value="equilateral" />
+        <property name="pointA" ref="point0"> </property>
+        <property name="pointB">
+            <!-- example of nested beans and id may or maynot be required -->
+            <bean id="point1" class="springdemo.Points">
+                <property name="x" value="1"/>
+                <property name="y" value="1"/>
+            </bean>
+        </property>
+        <property name="pointC" ref="point2" />
+    </bean>
+    
+    <bean id="point0" class="springdemo.Points">
+        <property name="x" value="0"/>
+        <property name="y" value="0"/>
+    </bean>
+    
+    <bean id="point2" class="springdemo.Points">
+        <property name="x" value="2"/>
+        <property name="y" value="2"/>
+    </bean>
+    
+    <bean id="point3" class="springdemo.Points">
+        <property name="x" value="3"/>
+        <property name="y" value="3"/>
+    </bean>
+    
+    <!-- bean for circle object -->
+    <bean id="circle" class="springdemo.Circle">
+        <property name="center" ref="point0"/>
+    </bean>
+    
+    <!-- bean for square object -->
+    <bean id="square" class="springdemo.Square">
+        <property name="pointA" ref="point0"> </property>
+        <property name="pointB">
+            <!-- example of nested beans and id may or maynot be required -->
+            <bean class="springdemo.Points">
+                <property name="x" value="1"/>
+                <property name="y" value="1"/>
+            </bean>
+        </property>
+        <property name="pointC">
+            <bean  class="springdemo.Points" >
+                <!-- implemntation of placeholder class values are in the propeties file...-->
+                <property name="x" value="${pointC.pointx}"/>
+                <property name="y" value="${pointC.pointy}"/>
+            </bean>
+        </property>
+        <property name="pointD" ref="point3" />
+    </bean>
+    
+    <!-- EXAMPLE FOR BEAN ALIAS -->
+    <alias name="triangle" alias="triangle-alias" />  
+    
+    <!-- implementation of bean post processor letting spring know that this class exists to call those two methods-->
+    <bean class="springdemo.DisplayNameBeanPostProcessor" />  
+    
+    <!-- implementation of bean factory post processor letting spring know that this class exists to call those two methods-->
+    <bean class="springdemo.MyBeanFactoryPostProcessor" />  
+    
+    <!-- implementation of bean factory placeholder class letting spring know that this class exists to call those two methods-->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="pointsconfig.properties"/>
+    </bean>
+    
+</beans>
